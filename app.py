@@ -9,7 +9,7 @@ load_dotenv()
 # Initialize FastAPI app
 app = FastAPI()
 
-# Instagram API credentials
+# Instagram API credentials from .env file
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")  
 INSTAGRAM_USER_ID =os.getenv("INSTAGRAM_USER_ID")
 
@@ -106,3 +106,6 @@ async def get_post_details(
 
     if "error" in data:
         return {"error": data["error"]["message"]}
+
+# App will run on port 7000
+# to run the app, use command: uvicorn app:app --reload --port 7000
