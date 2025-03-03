@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "34.93.146.107",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "youtube",
+            "database": "youtube",
+            "username": "sadiq_shaikh",
+            "password": "sadiq@123"
+        }
+    ]
+}
