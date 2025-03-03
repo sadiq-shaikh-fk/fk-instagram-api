@@ -1,21 +1,29 @@
-# Use a lightweight Python image
-FROM python:3.12-slim
+# Use an official Python runtime as a parent image
+FROM python:3.12
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install required packages (including cron)
-RUN apt-get update && apt-get install -y cron && pip install --no-cache-dir python-dotenv requests fastapi
-
-# Copy necessary files
+# Copy the current directory contents into the container at /app
 COPY . .
 
-# Ensure token file persists (volume will be mounted at runtime)
-RUN touch /app/access_token.json
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Set up cron job inside the container
-RUN echo "0 0 * * * python /app/refresh_token.py >> /var/log/cron.log 2>&1" > /etc/cron.d/token_refresh
-RUN chmod 0644 /etc/cron.d/token_refresh && crontab /etc/cron.d/token_refresh
+# Make sure cron is installed
+RUN apt-get update && apt-get install -y cron
 
-# Start both cron and the app
-CMD ["sh", "-c", "cron && tail -f /var/log/cron.log"]
+# Copy crontab file to the cron directory
+COPY crontab /etc/cron.d/refresh_token_cron
+
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/refresh_token_cron && crontab /etc/cron.d/refresh_token_cron
+
+# Create a log file for cron jobs
+RUN touch /var/log/cron.log
+
+# Expose the port on which the FastAPI app will run
+EXPOSE 7000
+
+# Start cron and FastAPI app
+CMD service cron start && uvicorn app:app --host 0.0.0.0 --port 7000

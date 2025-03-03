@@ -1,12 +1,13 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  token_refresher:
+  instagram_api:
+    container_name: instagram_api
     build: .
-    container_name: token_refresher
+    ports:
+      - "7000:7000"
     volumes:
-      - token_data:/app  # Persistent storage
-    restart: always  # Ensures the container restarts on failure
-
-volumes:
-  token_data:  # Defines the persistent volume
+      - .:/app
+    env_file:
+      - .env
+    restart: always

@@ -1,0 +1,1 @@
+0 0 */30 * * python /app/refresh_token.py >> /var/log/cron.log 2>&1
