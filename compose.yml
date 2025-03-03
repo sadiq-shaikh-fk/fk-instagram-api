@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  token_refresher:
+    build: .
+    container_name: token_refresher
+    volumes:
+      - token_data:/app  # Persistent storage
+    restart: always  # Ensures the container restarts on failure
+
+volumes:
+  token_data:  # Defines the persistent volume
