@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request, Depends
+from fastapi.templating import Jinja2Templates
 import requests
 import os
 from dotenv import load_dotenv
@@ -8,6 +9,13 @@ load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Configure templates directory
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/login")
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 # Instagram API credentials from .env file
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")  
